@@ -380,18 +380,6 @@ export const paintRules = (t: Theme): PaintRule[] => {
       },
     },
     {
-      dataLayer: "boundaries",
-      symbolizer: new LineSymbolizer({
-        dash: [3, 2],
-        color: t.boundaries,
-        width: 1,
-      }),
-      filter: (z, f) => {
-        const minAdminLevel = f.props["pmap:min_admin_level"];
-        return typeof minAdminLevel === "number" && minAdminLevel <= 2;
-      },
-    },
-    {
       dataLayer: "transit",
       symbolizer: new LineSymbolizer({
         dash: [0.3, 0.75],
@@ -412,13 +400,53 @@ export const paintRules = (t: Theme): PaintRule[] => {
     {
       dataLayer: "boundaries",
       symbolizer: new LineSymbolizer({
-        dash: [3, 2],
         color: t.boundaries,
-        width: 0.5,
+        width: (z, f) => {
+          return exp(1.6, [
+            [1, 0.66],
+            [7, 1.5],
+            [13, 3],
+          ])(z);
+        },
+        opacity: 0.85,
       }),
       filter: (z, f) => {
-        const minAdminLevel = f.props["pmap:min_admin_level"];
-        return typeof minAdminLevel === "number" && minAdminLevel > 2;
+        return f.props["pmap:kind"] === "country";
+      },
+    },
+    {
+      dataLayer: "boundaries",
+      symbolizer: new LineSymbolizer({
+        color: t.boundaries,
+        width: (z, f) => {
+          return exp(1.6, [
+            [1, 0.33],
+            [7, 0.66],
+            [13, 1.5],
+          ])(z);
+        },
+        opacity: 0.85,
+      }),
+      filter: (z, f) => {
+        return f.props["pmap:kind"] === "region";
+      },
+    },
+    {
+      dataLayer: "boundaries",
+      symbolizer: new LineSymbolizer({
+        color: t.boundaries,
+        width: (z, f) => {
+          return exp(1.6, [
+            [1, 0],
+            [7, 0.33],
+            [13, 0.66],
+          ])(z);
+        },
+        opacity: 0.7,
+      }),
+      filter: (z, f) => {
+        const kind = getString(f.props, "pmap:kind");
+        return !(["country", "region"].includes(kind));
       },
     },
   ];
