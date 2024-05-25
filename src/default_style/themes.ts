@@ -86,6 +86,7 @@ export interface Theme {
   state_label: string;
   state_label_halo: string;
   country_label: string;
+  country_label_halo?: string;
 }
 
 export const LIGHT: Theme = {
@@ -538,12 +539,106 @@ export const BLACK: Theme = {
   country_label: "#707070",
 };
 
+
+export const FLICKR: Theme = { // ff0084 ff9700
+  background: "#edf0f2",
+  earth: "#edf0f2",
+  park_a: "#ddecd6",
+  park_b: "#ddecd6",
+  hospital: "#e3e3e3",
+  industrial: "#e3e3e3",
+  school: "#e3e3e3",
+  wood_a: "#c9e3bc",
+  wood_b: "#c9e3bc",
+  pedestrian: "#ececec",
+  scrub_a: "#ddecd6",
+  scrub_b: "#ddecd6",
+  glacier: "#edf0f2",
+  sand: "#e8e4d0",
+  beach: "#e8e4d0",
+  aerodrome: "#e3e3e3",
+  runway: "#cccccc",
+  water: "#87c6ed",
+  pier: "#e0e0e0",
+  zoo: "#bbe3a3",
+  military: "#dcdcdc",
+
+  tunnel_other_casing: "#e0e0e0",
+  tunnel_minor_casing: "#e0e0e0",
+  tunnel_link_casing: "#e0e0e0",
+  tunnel_medium_casing: "#e0e0e0",
+  tunnel_major_casing: "#e0e0e0",
+  tunnel_highway_casing: "#e0e0e0",
+  tunnel_other: "#d5d5d5",
+  tunnel_minor: "#d5d5d5",
+  tunnel_link: "#d5d5d5",
+  tunnel_medium: "#d5d5d5",
+  tunnel_major: "#d5d5d5",
+  tunnel_highway: "#d5d5d5",
+
+  transit_pier: "#e0e0e0",
+  buildings: "#cccccc",
+
+  minor_service_casing: "#e0e0e0",
+  minor_casing: "#e0e0e0",
+  link_casing: "#e0e0e0",
+  medium_casing: "#e0e0e0",
+  major_casing_late: "#e0e0e0",
+  highway_casing_late: "#e0e0e0",
+  other: "#ebebeb",
+  minor_service: "#ebebeb",
+  minor_a: "#ebebeb",
+  minor_b: "#ffffff",
+  link: "#ffffff",
+  medium: "#f5f5f5",
+  major_casing_early: "#e0e0e0",
+  major: "#ffffff",
+  highway_casing_early: "#e0e0e0",
+  highway: "#ffffff",
+
+  railway: "#a7b1b3",
+  boundaries: "#aaaaaa",
+  waterway_label: "#107fd1",
+
+  bridges_other_casing: "#e0e0e0",
+  bridges_minor_casing: "#e0e0e0",
+  bridges_link_casing: "#e0e0e0",
+  bridges_medium_casing: "#e0e0e0",
+  bridges_major_casing: "#e0e0e0",
+  bridges_highway_casing: "#e0e0e0",
+  bridges_other: "#ebebeb",
+  bridges_minor: "#ffffff",
+  bridges_link: "#ffffff",
+  bridges_medium: "#f0eded",
+  bridges_major: "#f5f5f5",
+  bridges_highway: "#ffffff",
+
+  roads_label_minor: "#91888b",
+  roads_label_minor_halo: "#ffffff",
+  roads_label_major: "#938a8d",
+  roads_label_major_halo: "#ffffff",
+  ocean_label: "#107fd1",
+  peak_label: "#7e9aa0",
+  subplace_label: "#8f8f8f",
+  subplace_label_halo: "#e0e0e0",
+  city_circle: "#000000",
+  city_circle_stroke: "#ffffff",
+  city_label: "#000000",
+  city_label_halo: "#ffffff",
+  state_label: "#000000",
+  state_label_halo: "#ffffff",
+  country_label: "#000000",
+  country_label_halo: "#ffffff",
+};
+
+
 const themes: Record<string, Theme> = {
   light: LIGHT,
   dark: DARK,
   white: WHITE,
   grayscale: GRAYSCALE,
   black: BLACK,
+  flickr: FLICKR,
 };
 
 export default themes;

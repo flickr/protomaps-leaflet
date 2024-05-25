@@ -33,14 +33,15 @@
     "rbush": "^3.0.1"
   },
   "scripts": {
-    "dev": "esbuild src/index.ts --bundle --target=es6 --servedir=. --outfile=dist/protomaps-leaflet.js --global-name=protomapsL",
-    "build": "esbuild src/index.ts --bundle --target=es6 --outfile=dist/protomaps-leaflet.js --global-name=protomapsL",
-    "build-min": "esbuild src/index.ts --bundle --target=es6 --minify --outfile=dist/protomaps-leaflet.min.js --global-name=protomapsL",
-    "build-module": "esbuild src/index.ts --bundle --target=es6 --outfile=dist/index.js --format=esm",
+    "dev": "esbuild src/index.ts --bundle --target=es2015 --servedir=. --outfile=dist/protomaps-leaflet.js --global-name=F.ProtomapsLeaflet",
+    "build": "esbuild src/index.ts --bundle --target=es2015 --outfile=dist/protomaps-leaflet.js --global-name=F.ProtomapsLeaflet",
+    "build-min": "esbuild src/index.ts --bundle --target=es2015 --minify --outfile=dist/protomaps-leaflet.min.js --global-name=F.ProtomapsLeaflet",
+    "build-module": "esbuild src/index.ts --bundle --target=es2015 --outfile=dist/index.js --format=esm",
     "build-tsc": "tsc --declaration --outdir dist",
     "tsc": "tsc --noEmit --watch",
     "test": "tsx --test --test-reporter spec test/*.test.ts",
     "dist": "npm run build && npm run build-min && npm run build-module && npm run build-tsc",
+    "classic": "npm run dist && cp dist/protomaps-leaflet.min.js ../classic/javascript/protomaps-leaflet.js",
     "check": "biome check src test"
   },
   "repository": {

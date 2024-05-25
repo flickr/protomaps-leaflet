@@ -380,18 +380,6 @@ export const paintRules = (t: Theme): PaintRule[] => {
       },
     },
     {
-      dataLayer: "boundaries",
-      symbolizer: new LineSymbolizer({
-        dash: [3, 2],
-        color: t.boundaries,
-        width: 1,
-      }),
-      filter: (z, f) => {
-        const minAdminLevel = f.props["pmap:min_admin_level"];
-        return typeof minAdminLevel === "number" && minAdminLevel <= 2;
-      },
-    },
-    {
       dataLayer: "transit",
       symbolizer: new LineSymbolizer({
         dash: [0.3, 0.75],
@@ -412,20 +400,61 @@ export const paintRules = (t: Theme): PaintRule[] => {
     {
       dataLayer: "boundaries",
       symbolizer: new LineSymbolizer({
-        dash: [3, 2],
         color: t.boundaries,
-        width: 0.5,
+        width: (z, f) => {
+          return exp(1.6, [
+            [1, 0.66],
+            [7, 1.5],
+            [13, 3],
+          ])(z);
+        },
+        opacity: 0.85,
       }),
       filter: (z, f) => {
-        const minAdminLevel = f.props["pmap:min_admin_level"];
-        return typeof minAdminLevel === "number" && minAdminLevel > 2;
+        return f.props["pmap:kind"] === "country";
+      },
+    },
+    {
+      dataLayer: "boundaries",
+      symbolizer: new LineSymbolizer({
+        color: t.boundaries,
+        width: (z, f) => {
+          return exp(1.6, [
+            [1, 0.33],
+            [7, 0.66],
+            [13, 1.5],
+          ])(z);
+        },
+        opacity: 0.85,
+      }),
+      filter: (z, f) => {
+        return f.props["pmap:kind"] === "region";
+      },
+    },
+    {
+      dataLayer: "boundaries",
+      symbolizer: new LineSymbolizer({
+        color: t.boundaries,
+        width: (z, f) => {
+          return exp(1.6, [
+            [1, 0],
+            [7, 0.33],
+            [13, 0.66],
+          ])(z);
+        },
+        opacity: 0.7,
+      }),
+      filter: (z, f) => {
+        const kind = getString(f.props, "pmap:kind");
+        return !(["country", "region"].includes(kind));
       },
     },
   ];
 };
 
 export const labelRules = (t: Theme): LabelRule[] => {
-  const nametags = ["name"];
+  // @ts-ignore
+  const nametags = ["name:" + F.config.flickr.lang.slice(0,2), "name"];
 
   return [
     // {
@@ -435,7 +464,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
     //     new CenteredTextSymbolizer({
     //       labelProps: nametags,
     //       fill: params.neighbourhoodLabel,
-    //       font: "500 10px sans-serif",
+    //       font: "500 10px Proxima Nova",
     //       textTransform: "uppercase",
     //     }),
     //     params.neighbourhoodLabel,
@@ -449,7 +478,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
       symbolizer: new LineLabelSymbolizer({
         labelProps: nametags,
         fill: t.roads_label_minor,
-        font: "400 12px sans-serif",
+        font: "400 12px Proxima Nova",
         width: 2,
         stroke: t.roads_label_minor_halo,
       }),
@@ -465,7 +494,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
       symbolizer: new LineLabelSymbolizer({
         labelProps: nametags,
         fill: t.roads_label_major,
-        font: "400 12px sans-serif",
+        font: "400 12px Proxima Nova",
         width: 2,
         stroke: t.roads_label_major_halo,
       }),
@@ -481,7 +510,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
       symbolizer: new LineLabelSymbolizer({
         labelProps: nametags,
         fill: t.roads_label_major,
-        font: "400 12px sans-serif",
+        font: "400 12px Proxima Nova",
         width: 2,
         stroke: t.roads_label_major_halo,
       }),
@@ -498,19 +527,38 @@ export const labelRules = (t: Theme): LabelRule[] => {
         labelProps: nametags,
         fill: t.ocean_label,
         lineHeight: 1.5,
-        letterSpacing: 1,
+        letterSpacing: 3,
         font: (z, f) => {
           const size = linear([
-            [3, 10],
-            [10, 12],
+            [1, 11],
+            [3, 16],
+            [10, 26],
           ])(z);
-          return `400 ${size}px sans-serif`;
+          return `400 ${size}px Proxima Nova`;
         },
-        textTransform: "uppercase",
       }),
       filter: (z, f) => {
-        const kind = getString(f.props, "pmap:kind");
-        return ["ocean", "bay", "strait", "fjord"].includes(kind);
+        return f.props["pmap:kind"] === "ocean";
+      },
+    },
+    {
+      dataLayer: "physical_point",
+      symbolizer: new CenteredTextSymbolizer({
+        labelProps: nametags,
+        fill: t.ocean_label,
+        lineHeight: 1.5,
+        letterSpacing: 2,
+        font: (z, f) => {
+          const size = linear([
+            [4, 13],
+            [6, 14],
+          ])(z);
+          return `400 ${size}px Proxima Nova`;
+        },
+      }),
+      filter: (z, f) => {
+        if (z < 4) return false;
+        return f.props["pmap:kind"] === "sea";
       },
     },
     {
@@ -522,16 +570,16 @@ export const labelRules = (t: Theme): LabelRule[] => {
         letterSpacing: 1,
         font: (z, f) => {
           const size = linear([
-            [3, 0],
-            [6, 12],
+            [3, 10],
             [10, 12],
           ])(z);
-          return `400 ${size}px sans-serif`;
+          return `400 ${size}px Proxima Nova`;
         },
+        textTransform: "uppercase",
       }),
       filter: (z, f) => {
         const kind = getString(f.props, "pmap:kind");
-        return ["sea", "lake", "water"].includes(kind);
+        return ["bay", "strait", "lake", "fjord", "water"].includes(kind);
       },
     },
     {
@@ -547,9 +595,13 @@ export const labelRules = (t: Theme): LabelRule[] => {
         stroke: t.state_label_halo,
         width: 1,
         lineHeight: 1.5,
+        letterSpacing: 2,
         font: (z: number, f?: Feature) => {
-          if (z < 6) return "400 16px sans-serif";
-          return "400 12px sans-serif";
+          return "600 " + exp(1.6, [
+            [6, 10],
+            [8, 15],
+            [14, 20],
+          ])(z) + "px Proxima Nova";
         },
         textTransform: "uppercase",
       }),
@@ -562,12 +614,19 @@ export const labelRules = (t: Theme): LabelRule[] => {
       symbolizer: new CenteredTextSymbolizer({
         labelProps: nametags,
         fill: t.country_label,
+        stroke: t.country_label_halo,
+        width: 1,
         lineHeight: 1.5,
         font: (z: number, f?: Feature) => {
-          if (z < 6) return "600 12px sans-serif";
-          return "600 12px sans-serif";
+          return "600 " + exp(1.6, [
+            [0, 10],
+            [3, 12],
+            [4, 14],
+            [5, 16],
+            [6, 18],
+            [14, 20],
+          ])(z) + "px Proxima Nova";
         },
-        textTransform: "uppercase",
       }),
       filter: (z, f) => {
         return f.props["pmap:kind"] === "country";
@@ -580,20 +639,22 @@ export const labelRules = (t: Theme): LabelRule[] => {
       symbolizer: new CenteredTextSymbolizer({
         labelProps: nametags,
         fill: t.city_label,
+        stroke: t.city_label_halo,
+        width: 1,
         lineHeight: 1.5,
         font: (z: number, f?: Feature) => {
-          if (!f) return "400 12px sans-serif";
+          if (!f) return "400 12px Proxima Nova";
           const minZoom = f.props["pmap:min_zoom"];
           let weight = 400;
           if (minZoom && minZoom <= 5) {
             weight = 600;
           }
-          let size = 12;
+          let size = 14;
           const popRank = f.props["pmap:population_rank"];
           if (popRank && popRank > 9) {
             size = 16;
           }
-          return `${weight} ${size}px sans-serif`;
+          return `${weight} ${size}px Proxima Nova`;
         },
       }),
       sort: (a, b) => {
@@ -602,6 +663,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
         return aRank - bRank;
       },
       filter: (z, f) => {
+        if (z < 4) return false;
         return f.props["pmap:kind"] === "locality";
       },
     },
@@ -623,11 +685,12 @@ export const labelRules = (t: Theme): LabelRule[] => {
           offsetX: 6,
           offsetY: 4.5,
           font: (z, f) => {
-            return "400 12px sans-serif";
+            return "400 12px Proxima Nova";
           },
         }),
       ]),
       filter: (z, f) => {
+        if (z < 4) return false;
         return f.props["pmap:kind"] === "locality";
       },
     },
