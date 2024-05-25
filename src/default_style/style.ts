@@ -453,7 +453,8 @@ export const paintRules = (t: Theme): PaintRule[] => {
 };
 
 export const labelRules = (t: Theme): LabelRule[] => {
-  const nametags = ["name"];
+  // @ts-ignore
+  const nametags = ["name:" + F.config.flickr.lang.slice(0,2), "name"];
 
   return [
     // {
@@ -526,6 +527,46 @@ export const labelRules = (t: Theme): LabelRule[] => {
         labelProps: nametags,
         fill: t.ocean_label,
         lineHeight: 1.5,
+        letterSpacing: 3,
+        font: (z, f) => {
+          const size = linear([
+            [1, 11],
+            [3, 16],
+            [10, 26],
+          ])(z);
+          return `400 ${size}px Proxima Nova`;
+        },
+      }),
+      filter: (z, f) => {
+        return f.props["pmap:kind"] === "ocean";
+      },
+    },
+    {
+      dataLayer: "physical_point",
+      symbolizer: new CenteredTextSymbolizer({
+        labelProps: nametags,
+        fill: t.ocean_label,
+        lineHeight: 1.5,
+        letterSpacing: 2,
+        font: (z, f) => {
+          const size = linear([
+            [4, 13],
+            [6, 14],
+          ])(z);
+          return `400 ${size}px Proxima Nova`;
+        },
+      }),
+      filter: (z, f) => {
+        if (z < 4) return false;
+        return f.props["pmap:kind"] === "sea";
+      },
+    },
+    {
+      dataLayer: "physical_point",
+      symbolizer: new CenteredTextSymbolizer({
+        labelProps: nametags,
+        fill: t.ocean_label,
+        lineHeight: 1.5,
         letterSpacing: 1,
         font: (z, f) => {
           const size = linear([
@@ -538,28 +579,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
       }),
       filter: (z, f) => {
         const kind = getString(f.props, "pmap:kind");
-        return ["ocean", "bay", "strait", "fjord"].includes(kind);
-      },
-    },
-    {
-      dataLayer: "physical_point",
-      symbolizer: new CenteredTextSymbolizer({
-        labelProps: nametags,
-        fill: t.ocean_label,
-        lineHeight: 1.5,
-        letterSpacing: 1,
-        font: (z, f) => {
-          const size = linear([
-            [3, 0],
-            [6, 12],
-            [10, 12],
-          ])(z);
-          return `400 ${size}px Proxima Nova`;
-        },
-      }),
-      filter: (z, f) => {
-        const kind = getString(f.props, "pmap:kind");
-        return ["sea", "lake", "water"].includes(kind);
+        return ["bay", "strait", "lake", "fjord", "water"].includes(kind);
       },
     },
     {
@@ -643,6 +663,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
         return aRank - bRank;
       },
       filter: (z, f) => {
+        if (z < 4) return false;
         return f.props["pmap:kind"] === "locality";
       },
     },
@@ -669,6 +690,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
         }),
       ]),
       filter: (z, f) => {
+        if (z < 4) return false;
         return f.props["pmap:kind"] === "locality";
       },
     },
