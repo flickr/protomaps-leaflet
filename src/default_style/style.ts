@@ -463,7 +463,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
     //     new CenteredTextSymbolizer({
     //       labelProps: nametags,
     //       fill: params.neighbourhoodLabel,
-    //       font: "500 10px sans-serif",
+    //       font: "500 10px Proxima Nova",
     //       textTransform: "uppercase",
     //     }),
     //     params.neighbourhoodLabel,
@@ -477,7 +477,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
       symbolizer: new LineLabelSymbolizer({
         labelProps: nametags,
         fill: t.roads_label_minor,
-        font: "400 12px sans-serif",
+        font: "400 12px Proxima Nova",
         width: 2,
         stroke: t.roads_label_minor_halo,
       }),
@@ -493,7 +493,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
       symbolizer: new LineLabelSymbolizer({
         labelProps: nametags,
         fill: t.roads_label_major,
-        font: "400 12px sans-serif",
+        font: "400 12px Proxima Nova",
         width: 2,
         stroke: t.roads_label_major_halo,
       }),
@@ -509,7 +509,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
       symbolizer: new LineLabelSymbolizer({
         labelProps: nametags,
         fill: t.roads_label_major,
-        font: "400 12px sans-serif",
+        font: "400 12px Proxima Nova",
         width: 2,
         stroke: t.roads_label_major_halo,
       }),
@@ -532,7 +532,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
             [3, 10],
             [10, 12],
           ])(z);
-          return `400 ${size}px sans-serif`;
+          return `400 ${size}px Proxima Nova`;
         },
         textTransform: "uppercase",
       }),
@@ -554,7 +554,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
             [6, 12],
             [10, 12],
           ])(z);
-          return `400 ${size}px sans-serif`;
+          return `400 ${size}px Proxima Nova`;
         },
       }),
       filter: (z, f) => {
@@ -575,9 +575,13 @@ export const labelRules = (t: Theme): LabelRule[] => {
         stroke: t.state_label_halo,
         width: 1,
         lineHeight: 1.5,
+        letterSpacing: 2,
         font: (z: number, f?: Feature) => {
-          if (z < 6) return "400 16px sans-serif";
-          return "400 12px sans-serif";
+          return "600 " + exp(1.6, [
+            [6, 10],
+            [8, 15],
+            [14, 20],
+          ])(z) + "px Proxima Nova";
         },
         textTransform: "uppercase",
       }),
@@ -590,12 +594,19 @@ export const labelRules = (t: Theme): LabelRule[] => {
       symbolizer: new CenteredTextSymbolizer({
         labelProps: nametags,
         fill: t.country_label,
+        stroke: t.country_label_halo,
+        width: 1,
         lineHeight: 1.5,
         font: (z: number, f?: Feature) => {
-          if (z < 6) return "600 12px sans-serif";
-          return "600 12px sans-serif";
+          return "600 " + exp(1.6, [
+            [0, 10],
+            [3, 12],
+            [4, 14],
+            [5, 16],
+            [6, 18],
+            [14, 20],
+          ])(z) + "px Proxima Nova";
         },
-        textTransform: "uppercase",
       }),
       filter: (z, f) => {
         return f.props["pmap:kind"] === "country";
@@ -608,20 +619,22 @@ export const labelRules = (t: Theme): LabelRule[] => {
       symbolizer: new CenteredTextSymbolizer({
         labelProps: nametags,
         fill: t.city_label,
+        stroke: t.city_label_halo,
+        width: 1,
         lineHeight: 1.5,
         font: (z: number, f?: Feature) => {
-          if (!f) return "400 12px sans-serif";
+          if (!f) return "400 12px Proxima Nova";
           const minZoom = f.props["pmap:min_zoom"];
           let weight = 400;
           if (minZoom && minZoom <= 5) {
             weight = 600;
           }
-          let size = 12;
+          let size = 14;
           const popRank = f.props["pmap:population_rank"];
           if (popRank && popRank > 9) {
             size = 16;
           }
-          return `${weight} ${size}px sans-serif`;
+          return `${weight} ${size}px Proxima Nova`;
         },
       }),
       sort: (a, b) => {
@@ -651,7 +664,7 @@ export const labelRules = (t: Theme): LabelRule[] => {
           offsetX: 6,
           offsetY: 4.5,
           font: (z, f) => {
-            return "400 12px sans-serif";
+            return "400 12px Proxima Nova";
           },
         }),
       ]),

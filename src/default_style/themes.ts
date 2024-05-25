@@ -86,6 +86,7 @@ export interface Theme {
   state_label: string;
   state_label_halo: string;
   country_label: string;
+  country_label_halo?: string;
 }
 
 export const LIGHT: Theme = {
@@ -620,13 +621,14 @@ export const FLICKR: Theme = { // ff0084 ff9700
   peak_label: "#7e9aa0",
   subplace_label: "#8f8f8f",
   subplace_label_halo: "#e0e0e0",
-  city_circle: "#ffffff",
-  city_circle_stroke: "#a3a3a3",
-  city_label: "#5c5c5c",
-  city_label_halo: "#e0e0e0",
-  state_label: "#b3b3b3",
-  state_label_halo: "#e0e0e0",
-  country_label: "#a3a3a3",
+  city_circle: "#000000",
+  city_circle_stroke: "#ffffff",
+  city_label: "#000000",
+  city_label_halo: "#ffffff",
+  state_label: "#000000",
+  state_label_halo: "#ffffff",
+  country_label: "#000000",
+  country_label_halo: "#ffffff",
 };
 
 

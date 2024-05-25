@@ -41,7 +41,7 @@
     "tsc": "tsc --noEmit --watch",
     "test": "tsx --test --test-reporter spec test/*.test.ts",
     "dist": "npm run build && npm run build-min && npm run build-module && npm run build-tsc",
-    "classic": "npm run dist && cp dist/protomaps-leaflet.js ../classic/javascript/protomaps-leaflet.js",
+    "classic": "npm run dist && cp dist/protomaps-leaflet.min.js ../classic/javascript/protomaps-leaflet.js",
     "check": "biome check src test"
   },
   "repository": {
